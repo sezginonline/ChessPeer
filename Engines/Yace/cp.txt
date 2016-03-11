@@ -1,0 +1,42 @@
+[YACE]
+Console=0
+Logfile="engineext.log"
+; I have no idea, how to disable the previous, but I guess, it would be a good
+; idea to disable it, when Yace is running correctly
+EngineDir="E:\yace"
+EnginePath="E:\yace\yace.exe"
+; probably you will need to edit the above two
+NameRev="Yace 0.99.01"
+EditMode=1
+InputMoveDelay=30
+OutputMoveDelay=0
+ExitString="quit\n"
+EditEndString=".\n"
+SwapColorString="c\n"
+EditString="edit\n#\n"
+ForceString="force\n"
+UndoMoveString="undo\n"
+ColorStringw="white\n"
+ColorStringb="black\n"
+ComputeString="go\n"
+MoveNowString="?\n"
+NewGameString="force\nhard\neasy\nnew\n"
+InitString="xboard\nGUI CP\nnew\nhard\npost\n"
+; The GUI is Yace specific. It makes Yace to send "cleaner" PVs
+; I have no idea, what CP is doing with PVs, if it interpretes them,
+; or if it reformats them. If it does not reformat or interprete them,
+; it might be better to leave the "GUI CP\n" off. You will then see
+; a bit more information packed into the PV, and also in the coming versions
+; move numbers and SAN.
+PonderOn="hard\n"
+PonderOff="hard\neasy\n"
+SetAnalyseMode="analyze\n"
+ExitAnalyseMode="exit\n"
+Level0=level 1 9999 0\nsd %1\n
+Level1=sd 29\nlevel %4 %7 0\n
+Level2=sd 29\nst %3\n
+Level3=level 1 9999 0\nsd %1\n
+Level4=sd 29\nlevel 1 %7 %3\n
+Level5=sd 29\nlevel 0 %7 %5\n
+Level6=level 1 9999 0\nsd 29\n
+

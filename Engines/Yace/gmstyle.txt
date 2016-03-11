@@ -1,0 +1,182 @@
+GM Style!
+---------
+
+	This documentation is designed to explain how to setup a Opening Book in the way that
+Yace will play following a GM style.
+
+	The objective is to make a Opening Book that mimic some GM preferences so, this will 
+not influence how Yace plays when out of opening book.
+
+
+How to do this?
+---------------
+
+	First of all, you need a good collection of games of its favorite GM. You can obtain 
+this PGN files on the internet or, perhaps, you can find many games on Fritz-CD, ChessBase, 
+ChessMaster 8.000 or another commercial product. You can use Scid, a free chess database 
+product too.
+
+	Let us suppose that you already have the wanted file. A good idea, in my opinion, is 
+to discard whole the games that GM lost or it tied. These games probably contain openings with 
+bad moves! Now, you have to create two files. In one of these files you have to copy all white 
+games of the selected GM. In the other file, just copy all black games played by the GM. 
+
+	Let us say that you create a file called Talwhite.pgn and another: Talblack.pgn.
+
+	Now, before we create the file of openings of Yace, we needed to mark whole the moves 
+made by our GM with the flag: !! (very good moves). With that, when Yace meets in positions of 
+the opening in that GM has made some movement, the movement it will be recognized by the 
+flag !!.
+
+	For that, we will use the command carlos_pgn according to the example below, being 
+applied the same procedure for the file with the movements of white as the one of black.
+
+	carlos_pgn talwhite.pgn white.pgn n 3 0
+
+	After this, we have to use the same command to the black file:
+
+	carlos_pgn talblack.pgn black.pgn n 0 3
+
+	Observe that the command line is not exactly equal, of the first time we used 3 0, 
+marking the white moves with !!, in the other file we needed to mark the black ones with !!, 
+then we used 0 3! ( For more information about this command, please read at the end of this 
+document ).
+
+	After the execution of these commands, two files were created, a file called white.pgn 
+and other black.pgn. In white.pgn whole the white movements are marked with !!, and in black.pgn 
+all the black movements are marked with !!. You can open the files with its favorite text editor 
+to confirm.
+
+	Now, we have to create the learn book file, and add the GM moves.
+
+	For that, we will indicate the name of the file:  
+  
+book_f dblearn.bin  
+  
+	Ready, we indicated the name of the file for Yace. If you want, you can specify any 
+diferent name, as kasparov.bin, for example, but then, you need to make more modifications in 
+the Yace.ini file, read more informations on this in the end of this document. I used the 
+name dblearn.bin because this is the default file name used by Yace and automatically opened. 
+After that command, Yace will exhibit a mistake message, don't worry, it is normal, because 
+the file specified doesn't still exist. We are going therefore to create it with the command 
+book_create, let us see: 
+  
+book_c nul 10000 1  
+  
+	After the execution of the command above, the file dblearn.bin be just created, but it 
+is empty. Now we needed to add the movements of GM to the file, for that we will use the 
+command book_add twice, let us see: 
+  
+book_add white.pgn 40  
+  
+	After the conclusion of this command, the movements of white were added, we will repeat 
+the command for the file that contains the black movements:  
+  
+book_add black.pgn 40  
+  
+	Ready! Now our file dblearn.bin is already prepared! :-)  
+	Close the Yace. Soon after, open ( with your text editor ) the file Yace.ini and 
+verify if it contains the line: 
+  
+book_learn 7 
+  
+	Attention! That line is essential, without it Yace won't open our file dblearn.bin!  
+  
+	Ending, if its file Yace.ini already contains the specified line, it is already 
+everything certain and you can already open Yace in Winboard to verify everything it is running 
+fine! ;-)) 
+
+
+Better explanation of some commands and tricks:
+-----------------------------------------------
+
+
+carlos_pgn : 
+------------
+	
+	In the sample, we have used this command to mark white or black moves with the 
+flag !!. That command has several other functions. Even so, we will explain here, a little 
+better the operation of this command with the objective that used previously.
+
+	The command syntax is:
+
+	carlos_pgn inputfile outputfile n number number
+
+	Where: 
+
+	inputfile  - the name of file that will be used. Has to be a PGN file!
+
+	outputfile - the name of the file that will be created by Yace with the apropriated 
+flags added
+
+	n - tells Yace the procedure that it will be applied to the file, that is to say, 
+to add flags! 
+
+	number - this first number indicates the flag that will be added to the white moves.
+
+	number - this second number indicate the flags that will be added to the black moves.
+
+	This numbers are equal to flag, see below:
+
+	 3 means !! or very good move.
+	 2 means !  or good move.     
+	 1 means !? or interesting move.
+	 0 means =  or no action or no flag!
+	-1 means ?! or not so good move.
+	-2 means ?  or bad move.
+	-3 means ?? or very bad move.
+
+	Now, a small example. Let us suppose that you want to alter the file kaspywhite.pgn, 
+adding the flag ! to all the white movements. Obligatorily a new modified file will be created, 
+staying the file kaspywhite.pgn untouched. Then, we will choose a name any, as white.pgn, for 
+the file that should be created by Yace. We would have then accordingly below a command:
+
+	carlos_pgn kaspywhite.pgn white.pgn n 2 0
+
+	Remember: if you want to add flags to the black moves, and make no changes in the white 
+moves, you have to set the first number to 0 ( zero ) and the second number accordingly to the
+needed flag.
+
+
+How to use a learn file with name different of dblearn.bin:
+-----------------------------------------------------------
+
+In the example that we mentioned previously, we created the file dblearn.bin and we added 
+the prepared files with the wanted "flags". Even so, in case you need, you can create the file 
+learn of Yace with a different name. However, by default, Yace tries to open learn file the 
+file: dblearn.bin. Then, if you create a learn file with name different from the default, you 
+should instruct Yace to open this file when it begins. For that, it is enough to add the 
+command lbook_f to the file Yace.ini specifying the name of the file to be open. Suppose that 
+you want to use as learn file, the file kasparov.bin, then you would need to add to the file 
+Yace.ini, the command line below:  
+  
+lbook_f kasparov.bin  
+  
+Ok! When Yace begins, then it will open that learn file!
+
+
+How to adjust Yace to play closer to the style of a GM?
+-------------------------------------------------------
+
+
+By default, when Yace finds two or more movements marked with !!, it will attribute to the 
+movements a same value, so that the probability of playing anyone of the movements, in the 
+position, it will be the same. Suppose that in the opening, you have the movements: e4, d4 
+and Nf3 marked with !!. In that case, each movement will have 33% of chances of being executed. 
+However, in the database that you used to copy the style of GM, you noticed that the player 
+prefers to play e4 most of the time, let us say 62%! Then, won't its learn file, be very close 
+to the style of GM, does it agree? Even so, there is a command that allows Yace to use the 
+statistics contained in the learn file that you created, this command is: book_mode.  
+For that, is necessary to edit and add to the file Yace.ini the line:  
+  
+book_mode 2  
+  
+Ready! Now, Yace will use the statistics of the learn file to select its movements in the 
+opening, really cool!
+
+
+That's it!
+
+Herley Mühlenbruch Guimarães - 18/12/2.001
+
+

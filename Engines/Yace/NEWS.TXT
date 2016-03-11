@@ -1,0 +1,815 @@
+Note, there is some useful information in this text, but also much
+very technical descriptions. Feel free to ignore all of the later.
+
+Yace now has a Web page: http://home1.stofanet.dk/moq/
+This was all the work of Mogens Larsen. I wish to thank him very much
+for this!
+
+Version > 0.99.50
+
+Note that some documentation of new commands is missing.
+
+9978, 9979: Minor tweaks, mostly only interesting for playing under
+"real" tournament conditions with a "normal" board and chess clock.
+
+9977: Minor speedups
+
+9976: Implemented annotate command
+Ouput some info about TB and interior node statistics at the end
+of a search in UCI mode.
+autoplayer_delay defaulted to 600 ms. Changed to 0.       
+
+9975:
+Don't show the same winner against me in fi note several times.
+New command nsgames ("name save games")
+
+after
+
+nsgames _200211.pgn
+
+Yace will save the games opponent wise in PGNs like crafty_200211.pgn, 
+comet_200211.pgn, etc. Note, that when you have an sgames command, too, 
+the games will be saved twice.
+
+New option to cadiz_pgn/add_eco. Command "m" (match) will show results 
+of Yace from some PGNs with some counts of wins/draws/losses, the ECO 
+codes, and the results, as the matches proceed.
+
+At some time recently, disabled much pruning. Enabled again.
+
+Fixed a bug in UCI command searchmoves, which could yield in a crash.
+
+9974:
+New command book_split. Documentation will follow.
+Fixed a bug in pawn endgames. Drawn pawnendgames with only a-pawn were not
+seen as draw, while won pawn endgames with b-pawns were seen as drawn.
+
+9973 and older:
+Some new engine options available via UCI engine setup.
+Implemented book learning in UCI mode.
+Yace was not using dblearn.bin in UCI mode - fixed.
+Some changes in search, including a bug fix of too much extensions in
+some pawn endgames.
+Clain draw by insufficient material for KBK and KNK.
+Display different scores for mate in xboard mode. With this change,
+Chesspartner should display correct mate scores.
+Added support, so that time controls like 40 moves in 2 hours, rest of the
+game in one hour should work under ChessPartner. (the pure xboard protocol
+does at the moment of this writing not support such time controls).
+Fixed a problem with Chesspartner and pondering with ICS games.
+Added a new section for Chesspartner/ERT that should support more
+complicated tournament time controls, and also switching of the engine book.
+New command book_clean, that will delete any NAGs from the opening book.
+dbbook.bin will be used, or the book set by book_file.
+To PV moves from EGTBs, add !! to moves for the winning side, when
+all alternative moves yield draw or are losing. (! means, that it is
+the only move, that yields the shortest mate, but at least one other
+move is winning, too).
+Added interior node recogognition and memory bitbases for 3 and 4-men
+endgames. New commands create_bitbases and bbpath.
+Added cadiz_pgn command.
+Added tb_usage command. tb_usage 3 is the default. tb_usage 0 will
+almost not use TBs. tb_usage 4 will use TBs extremely.
+When the expected move and the move by the opponent differ, report the
+expected move in the PGN as a variant.
+Added "win_human", "win_computers", "win_all", "win_file", "prompt_human",
+"prompt_all", "prompt_computer", commands for automatically setting
+finger notes of recent opponents that won against Yace on ICSes.
+Added book_mode command.
+Added the file gmstyle.txt to the distribution. This file was contributed
+by Herley Muhlenbruch. Thanks a lot!
+Added info about the depth of already stored analysis info to the log
+file, when running under WB-GUIs. This info may be useful, when analysing
+positions, and using the persistant hash tables of Yace ("temporary
+learning"). A tail like utility can be used to watch the log file
+while analyzing. See for example
+http://www.winboardengines.de/html/wbdownload.html
+Under Unix, use tail -f
+Handle the extremely rare cases, where castling is possible in TB
+positions correctly.
+Fixed a bug in PGN reading. Yace did not allow Strings to split lines
+in comments. So
+20. Bxh6 {Karpov mentioned: "I was happy
+after this move"} caused an error.
+Fixed another PGN reading bug. Comments "{}" in variations "()", that had again
+something in parentheses confused Yace, when the perentheses didn't all
+match (which is not needed inside comments).
+Reading PGN files for book_parse, book_add and book_create in binary mode
+now. This is needed, because some PGN files have the old DOS-style end of
+file character embedded somewhere in the middle. Input processing had stopped
+at this point ...
+Thanks to Ferdinand Mosca for giving an example PGN that showed all those
+problems.
+Added ignore_system command. After this command, yace will ignore all
+system/shell commands (the commands starting with !).
+This is useful, when zippypassword2 is used for ICS play, and will for
+example not allow to delete files via this password.
+Fixed a bug for book_create and book_add. Essentially it made Yace
+also store drawn games in the book, when the use_result was indicating
+that only winning moves should be stored. Sorry ...
+Added a command cooktest.
+cooktest filename.epd
+will run an EPD-testsuite, but it will disable the analysis of the given
+bm solutions. This can be helpful to people, who are designing test-suites
+to find out, if there are alternative solutions.
+Added a command, to change the maximum size of the file poslearn.bin.
+By default, this has space for 10000 positions. To resize this, start
+Yace in text mode and type
+
+posentries 20000
+
+to change the size to 20000 positions. Only making the size bigger is
+supported. Note, that Yace will need 16 bytes of memory for each position.
+Note, that this command must only be used once, don't put such a line into
+yace.ini.
+Fixed a bug, where Yace could crash under very rare circumstances (probably i
+impossible in normal games). Thanks to Christian Goralski for finding this.
+Fixed a bug in the evaluation of K+P vs K endgames.
+Added a poor man's n-best mode, which is only usable with the text interface
+(or with UCI GUIs that support this, like Shredder 5).
+Type
+eml 1
+(eml = edit move list) to enter this mode. Then, before each move, you
+will see a list of legal moves. If you want to disable a move from analysis,
+type the move numer followed by ENTER. This will toggle the status of the
+move from e=enabled to d=disabled. To leave this mode, type eml 0.
+Changed the behaviour in case of fail high and fail low. Now the search
+window will be opened gradually.
+Some changes for drawish endgames, where the stronger side has no
+pawns left.
+Store search depth and search time in the PGN.
+Experimentally tweaked search extensions.
+Added book_random command. Default is 1. With book_random 0, Yace will
+allways execute the most popular move from the book. When 2 or more moves
+have the same count, or have !! attached, one of those will be still
+selected randomly. There are many issues arising with this. E.g. expect
+many duplicate games in engine matches, that use a similar non randomizing
+book selection scheme.
+Again some tweaks to f6/h6 code.
+Added support for only analyzing selected moves under UCI. That I have
+forgot this earlier yielded also in the fact, that Analyze game under
+the S5 GUI did not work, as it should.
+Show the maximum search depth under UCI.
+Changed some values connected with passed pawns and backward pawns.
+"Mirrored" the code for dangerous P/B on f3/f6/h3/h6 to the Q-side
+for typically Q-side castled positions.
+Added routine for queen endgames (Only Qs and pawns).
+Experimentally added nullmove pruning to some pawnendgames, where
+both sides have more than 3 pawns.
+
+Version 0.99.50
+
+Added tips.txt contributed by Matt Josephson.
+Added lbookc.bat to create an "empty" learn-book, that is preoccupied
+with NAGs by Mogens Larsen.
+Some updates to readme.txt. Still much is missing ...
+Added ECO classification.
+New command show_eco. show_eco 1 (the default) will will print ECO code,
+and opening into pgn files. show_eco 2 will also kibitz or whisper (depending
+on the setting of whisper and autokib, and a Computer or human opponent)
+the ECO opening to ICS, and show the opening under Winboard. See also
+readme.txt.
+show_eco 0 will disable all this.
+Under ICS, Yace will automatically set finger note 1 to the program name
+and version number.
+Using some evaluation parameters as suggested by Ferdinand Mosca. Thanks!
+Fixed a small misfeature, where Yace could think for a forced
+move with ponder on, even, after it received the move of the opponent.
+Added overwrite_vgm command. Defaults to 0. After
+overwrite_vgm 1
+in yace.ini, Yace will be allowed, to overwrite !! moves (vgm = "very
+good move") in the opening book by the same move as ?? in the learn
+book. By default, Yace will not overwrite the !!.
+Changed handling of backward pawns on half-open files. This also may yield
+in slightly better handling of majorities, however much knowledge is missing
+here.
+With winboard 4.2.3 it could happen, that Yace moves immediately
+for the first move when starting an adjourned game at an ICS
+just after starting WB (and Yace). Fixed.
+New command min_learn_tc. Gives time control in seconds, for which book
+learning will start. A game length of 60 moves is assumed for this.
+So, with Fischer clock 5 minutes + 3 seconds, a length of 480 seconds
+is assumed. min_learn_tc defaults to 300 (=5 minutes).
+Some changes to PGN formating.
+New command lbook_file. Defaults to dblearn.bin.
+Automatic book learning added. Will be ignored under Shredder 5 at the moment.
+I suggest putting the line
+book_learn 7
+into yace.ini for enabling this. Better documentation will follow.
+With the above line, Yace will not repeat a line an, that lost a game.
+Yace will *not* try to repeat won games.
+Added new optional parameters to book_create and book_add.
+Fixed a bug, where Yace in very rare cases could forfeit on time in
+the first move after continuing an adjourned game when playing on ICS.
+This could happen, when Yace was white, and had very little time left,
+and the opponent had much time left, because Yace used the wrong clock.
+Added some code for dangerous pawns or bishops on f3/f6 and h3/h6 when
+the king is in a typically kingside-castling position.
+Added epdtest command. (epdtest testsuite.epd)
+Added read_pgn command. (read_pgn games.pgn or read_pgn games.pgn 10
+to read the 10th game in the pgn.)
+Modified handling of open/half open files around the king.
+Modified values for pawns defending the king in castled positions.
+Added kids_mode command. Defaults to 0. With
+kids_mode 1
+in yace.ini, yace will not search any moves, and just play a random
+legal move. It will however use the opening book.
+with kids_mode 2, Yace will just do an extremely short search of 1 ply.
+It will use the opening book. You can disable the opening book by
+use_book off
+If kids_mode 1 is too easy and kids_mode 2 is too difficult, you can
+slightly weaken Yace by adding the line
+qexact 1
+to yace.ini.
+Added some error messages in tight memory situations while book building.
+Under very rare circumstances, in ICS play it could happen, that Yace
+lost a game in the first move, because of a resign in the last game.
+Fixed. Thanks to Jose Luis Jimenez for finding this.
+Increased bonus for the bishop pair.
+Rewritten pawn shield code, following suggestions by Ferdinand Mosca.
+Added some knowledge about connected passed pawns on rank 6 vs. rook.
+Added version command. Usually Yace will tell its name to Winboard as
+Yace 0.99.xx or similar. After you put a line
+
+version chessfan specially tuned
+
+it will use "Yace 0.99.xx chessfan specially tuned" instead. This will
+also be seen in the PGN files of WB 4.2 or later, and in the hello
+message at internet chess servers.
+Small fixes for Bishop of opposite colors code with otherwise unequal
+material.
+Don't log the stat output anymore.
+Fixed a typo (Selectifity instead of Selectivity) in the engine parameters
+as an UCI engine. This typo had the consequence, that the Selectivity
+setting was essentially ignored. Thanks to Mogens Larsen, for pointing this
+out.
+Experimental pawn endgame code added.
+As an UCI mode, optionally show the hash efficiency. Not, that this is
+not the hash filling of other UCI engines, but rather the value:
+successful probes/hash probes.
+More aggressive TB-probing (may yield in significantly slower NPS).
+Report some information more continiously to the UCI GUI.
+Added extension, when a trade yields a pawn endgame.
+Small bug in move formating: When two pieces can move to the same
+square, but one was with check (because of a discovered check), Yace
+forgot to put the file (or rank or both) of the from square. Even, if
+the move is unambigous, this is wrong. (So output was i.e. Nh6+ instead
+of Ngh6+)
+In Analyzse mode, Yace will temporarily remember important results
+of analysed moves/subtrees. So, if at a the root of a analyze tree,
+Yace cannot see, that a move is very good or very bad, but it
+recognizes this, after you have done some moves, and then you go back,
+Yace should know, that the line yields a good/bad score, and may find
+a different move, or try a different refutation.
+Added cp.txt. This is my suggestion for enginiext.ini for the
+ChessPartner GUI. It is totally untested by me.
+Implemented sd command.
+Fixed a bug in the handling of black outposts.
+If you put a line
+whisper
+into yace.ini, Yace won't whisper anymore in ICS mode.
+(Default is whispering, or with the line "whisper kibitz" kibitzing.)
+Fixed a small problem with 50 moves rule: Yace did not take into account,
+that it can mate or can get mated with the last move, even when this is
+not a capture or a pawn push.
+Implemented sd command for searching to a particular depth.
+Defaulting to positional learning enabled.
+To run Yace under the Millenium Chess System, please add the line
+GUI MCS
+to yace.ini.
+Added support for UCI. Multi Variants mode won't work yet.
+Under UCI you should use Yace without ini file, if you do not really
+know what you are doing. Important parameters should be set in the engines
+setup of the GUI instead. Under UCI Yace will default to use its own book. I had some problems to make work this reliably. It seems to
+be needed, that you create an empty book under Shredder and select this
+for Yace. Also check "Use engine book" under BookOptions. If you uncheck
+"Use engine book", Yace will never access its own book.
+Added support for WB protocol version 2.
+Solved a problem, when not having a full set of EGTBs. I.e. sometimes
+Yace refused to promote a pawn, when having KPPKP and not KQPKP.
+In endgame, give outside passed pawns more value.
+Added some knowledge about supported/connected/blocked passed pawns.
+Added yace.bmp to the distribution, so you can see the Yace logo
+under Fritz with newer versions of the WB adapter.
+Ponder also, when the ponder move is forced.
+Added event command, to fill out event tag in PGNs.
+Use
+event My tournament
+in yace.ini. Don't use '"' in the text after event.
+Slight format changes in the PGN.
+Make book_holes and book_learn work under CB. Will sometimes not work
+in the exected way with permanent brain. This is due to the design
+of the WB adapter, that sometimes really doesn't tell the engine, if
+it searches for itself, or if it should search a ponder move for the
+opponent.
+Added max_PV_WB and max_PV_tellics. These are the maximum number of
+characters Yace will send to WB in the PVs for displaying in search, ponder
+and analyzed mode, and in the ICS whisper/kibitz output. Default is
+200 and 350. Usage of too high numbers make current versions of WB crash.
+Added space_in_PV command, default zero. If you prefer
+1. e4 e5 2. Nf3 or 1...e5 2. Nf3
+in the PV to
+1.e4 e5 2.Nf3 or 1...e5 2.Nf3
+use space_in_PV 1 in yace.ini.
+Show move numbers in PV.
+Added move_number_in_PV command. Default 1. To disable move numbers in PV
+use move_number_in_PV 0 in yace.ini.
+Use short algebraic notation (SAN) for PVs.
+Resolve the PV, when it ends with an endbase table hit. In Analyse
+mode, this will be done for all PVs, in "normal" search only for
+the last PV before the search exits. Note, that due to a bug in Winboard,
+sometimes not the whole PV can be shown, when it is too long. Sending a
+too long PV to WB makes it crash. The same is true for Fritz, which can
+crash, when PVs with more than 30 half moves are sent. Also Fritz won't
+display any PV, when more than 30 half move are sent.
+You will be able to see the whole PV in the log file, or when using Yace
+without GUI.
+Implemented code for rook pawn with wrong bishop.
+In B or N vs pawns, allways prefer the pawn(s).
+Yace knew, that KNNK is draw, but KNNKP was evaluted high for the Ns.
+Now, the score will be very close to draw.
+Whisper/kibitz table probes/found in ICS mode.
+Give passed pawns, that cannot be catched by opponent king higher value,
+when opponent has no pieces.
+Implemented Bitboards for pawn scoring.
+WB didn't like the error message of Yace, when no book was found. Fixed.
+Make endings with only rooks and pawns more drawish.
+Search will be more careful about repetition and 50 moves rule.
+Added some code about good/bad bishop/knight and blocked positions.
+Save the game and bklearn.pgn even when quit is received in ponder mode. This
+is needed for ChessVision. Thanks to Carlos Pesce for reporting the bug.
+Added log_path command. If you want to use this, put it as the first line
+in yace.ini like
+log_path logs\
+on DOS/Windows or
+log_path logs/
+on Unix. This would place all the log files created by auto_log into
+this directory, considered as a subdirectory of the yace directory. You
+have to create the directory first. Also, the backslash '\' or slash '/'
+at the end of the command is needed. You can also use a directory totally
+unrelated to the Yace directory by i.e.
+log_path c:\my\path\to\the\logs\
+Rename start.pgn to samplest.pgn, so that the start.pgn will not be
+overwritten when unpacking the zip. Thanks to Jason Williams for pointing
+this out.
+Make positional learning and sgames work under the CB GUI.
+Fix for pawn_shield code, shouldn't move Rh1h2 or Rh8h7 when not castled.
+New command auto_log. With the line
+auto_log
+in yace.ini, for each game a new log file will be written. The name
+of the log file will be yacennnn.log. Also, in yacegam.pgn, the name
+of the log file will be written under the tag LogFile.
+Endgames with opposite colored bishops are drawish.
+New defaults for many search parameters.
+For playing under Chess Academy, put a line
+GUI ChessAcademy
+into yace.ini.
+Don't abort search after about 4.2 billion nodes. Some output
+will be wrong, like NPS and nodes.
+Accept and ignore "." while searching/pondering. This seems to be
+needed for MCS.
+Added a new parameter use_result to book_create.
+book_c book.pgn initial_entries maxply mincount use_result
+When use_result is 1, only moves from games are counted, that win, draw
+or have no result. When use_result is 2, winning moves are counted double and drawing moves once.
+When use_result is 3, only winning moves are counted.
+Added comment command. If you have a line
+comment Just a test game
+in yace.ini, In the games file, there will be a new tag
+[Comment "Just a test game"]
+Again many people have helped to find bugs and point out weaknesses
+of Yace. Until version number 1.0, I hope to have a complete list.
+Thanks a lot.
+
+Version 0.23 04.10.2000
+You need to create or download a new opening book for this version.
+Slightly changed the book_create command. Please reread the paragraph
+about the book creation in readme.txt.
+Added the shell scripts bookc and bench contributed by
+Ralph Joerg Hellmig to the Linux distribution.
+Added start.pgn contributed by Mogens Larsen to the deistribution.
+Slightly changed book move selection scheme.
+Added show_book command, see sample yace.ini file.
+Don't use less time for the search with time control 60 moves in time,
+than with time control game in time. This was suggested (not for Yace)
+by Uri Blass.
+Added the Yace logo created by Margit Eberl to the distribution.
+Added positional learning. Put
+pos_learn 1
+into yace.ini to enable. Yace then will write two files, learnpos.bin and
+learnpos.yac. The later is an ASCII text file, that also can be imported by
+import_pos learnpos.yac. Positional learning will currently only be done,
+when Yace starts from the initial position. Also, Yace cannot learn under the
+ChessBase GUI, but it can use the learned data when not starting from the initial
+position or under the ChessBase GUI.
+Currently there is only space for 10000 positions, but that might get increased soon.
+Added book_file command. By default all opening book operations are
+for the file dbbook.bin. You can change this by
+book_file mybook.bin
+or similar.
+Don't stop moving after resigned, so the opponent can enjoy to mate me,
+if he really wants.
+Implemented noise command. See sample yace.ini.
+When resigning in xboard mode also send "tellics resign" to the GUI.
+This is needed for ChessVision.
+Make Yace more forgivng to errors in PGN files.
+Possibly announce mate on Chess Servers. Default is not to announce mates.
+Put a line
+announce_mate kibitz
+into yace.ini to let Yace announce mates by kibitz. Other possibilities
+might be "announce_mate whisper" or "announce_mate say".
+Display scores in pawn units instead of centipawn units. Also display
+Mat02 isntead of 29997. The same is true for the whisper/kibitz output
+on chess servers.
+When failing to open the ini file from the command line, yace.ini
+will be tried. This should avoid problems, when accidently given
+a command line parameter.
+Fixed a bug with move input. Some illegal moves were accepted. I.e.
+1. e53 was accepted and interpreted as 1. e3. Thanks to Jason Williamson for
+reporting this.
+Added many error messages, that you hopefully will never see.
+Small documentation updates.
+Added many comments to yace.ini.
+Added sgames command to save the games of Yace together with scores.
+Use a line
+sgames yace.pgn
+in yace.ini.
+Speeded up book_parse, book_create and book_add, when user forgets to
+set the hash size to zero.
+Added egtb_cache command to set the chache size for endgame tables.
+This must be before tbldir in yace.ini. Default is 2M.
+Increased the size of some internal structures for better aligning and speed.
+Also increased the maximum number of moves in a game from 250 to 480.
+Added book_holes command to ease detection of holes in the opening book.
+If you set book_holes to n, and Yace will be out of book in the nth move
+or earlier, some data will be written to bkholes.pgn. Default is zero,
+which means, that this feature will not be used. To let Yace report, when
+it is out of the opening book in the 6th move or earlier, put a line
+book_holes 6
+into yace.ini.
+Found a bug in search, where a draw by repetition was feared too early.
+Thanks to Jason Williamson, for pointing out a game, where this happened.
+Found a subtle bug in repetition detection. When the last irreversible move
+is a double pawn push, and the pawn cannot be captured ep, the
+repetition counter could be one too low. This is accidently also fixing
+a bug reported by Gabor Szots, where in rare cases Yace blundered, while
+using endgame tables after a double pawn push.
+Added fen command. This will print the FEN of the current position.
+Added half automated book learning. If you set book_learn 1 in yace.ini,
+Yace will append some information to a file bklearn.dat, when it thinks,
+it came bad out of book. What means bad out of book depends on the value
+of margin_book_learn_white and margin_book_learn_black. The defaults are
+-70 and -50 (centipawns) amd can be overwritten in yace.ini. When in the
+first ten moves out of book, the score gets smaller than this value,
+the information will be written down to bklearn.pgn.
+This file could be used with
+book_add bklearn.pgn
+but is actually meant to be inspected first.
+All learning features will be ignored with the Winboard Adapter of ChessBase.
+Changed whisper output. Thanks to Jason Williamson for his suggestions.
+New command say for chess servers. At the start of a new game,
+Yace will print "tellics say Hello ..."
+If you have a line
+say kibitz
+in yace.ini, it will instead print "tellics kibitz Hello ..."
+Added autokibitz command for chess servers. when set to 1, Yace will
+automatically kibitz against a computer opponent, and whisper against
+an human opponent. Default is 0.
+Added bk command. Now under Winboard, Help->Book should work. To examine
+the opening book, you can use Mode->Edit Game and input moves.
+Then Help->Book. Also from the Yace prompt, you can use
+new, force, input moves, bk. (Also undo and remove can be handy here).
+Try to be more careful about open/half-open h-lines.
+Less aggressive pruning at depth 2.
+Added book_add command to add book lines to existing book.
+Allow comments in the pgn for book creation/addition to span lines.
+Maximum comment length is 2000. After this, it will be assumed, that the
+input is missing a closing comment character.
+Fritz didn't like, when Yace sent long PVs. Tried to fix this.
+Minor speedups.
+Allow switching the ponder mode under Winboard.
+Fixed a bug with setboard. Castling rights and ep square could have been wrong.
+Tried to fix problems reported by Jason Williamson with Permanent Brain
+under Fritz.
+Fixed a bug in search. Yace would crash, when no pseudo legal was possible at
+all. Never happened to me in a real game, but seen in an constructed
+(not reachable by legal moves) position.
+Added a few comments to the sample ini file.
+Accept new while pondering. This is needed for CA. Thanks to Djordje Vidanovic
+for reporting the problem.
+Report the commands in yace.ini to the log.
+Fixed small glitch in Analyze mode, when search exited, i.e. because a
+mate was found. After this, Winboard didn't show the search statistics.
+!? and ?! worked the wrong way around. Thanks to Mogens Larsen for reporting.
+Added tellics command when playing on ICS. Now yace will by default
+whisper the PVs when playing on an ICS. You can put a line
+whisper kibitz
+into yace.ini, if you prefer kibitz instead of whisper.
+Also
+whisper anytext
+is possible, and might be useful, if there is an alias set for anytext.
+Thanks very much to Ralph Joerg Hellmig for his suggestions and tests.
+Implemented new hash table strategy.
+Added cv_yace.ini for ChessVision.
+Added GUI command for auto detection of ChessAssistant.
+Don't cut PVs for ChessAssistant.
+Don't show 'H' at the end ov PV moves under ChessAssistent.
+Don't resign under ChessAssitant.
+Added ca.txt for some setup information under ChessAssistant. Thanks
+to Victor Zakharov for providing the information.
+Fixed small bug in search: probing of EGTBs could have been delayed by
+one ply.
+Book selection of ? moves was wrong, fixed.
+Castling rights after edit (Winboard setup position) could be wrong
+in rare cases, fixed.
+Thanks to Carlos Pesce for reporting the last two problems.
+Slightly changed the output in Analyze mode under Winboard, so that
+now it can be seen, when Yace fail high or low.
+Let Yace post longer PVs under Winboard.
+Show a more informative display of the book move selection in the log
+(or on the screen, when not in xboard_mode).
+Fixed yet another bug in time synchronization with Fritz GUI. Thanks
+to Mogens Larsen for reporting and testing.
+Revised null move algorithm again. Description in readme.txt is not
+up to date. null_split will be ignored. No change with default settings.
+Fixed bug in qsearch. Fail low score could have been too small, probably
+not of practical relevance.
+Thanks to Sarah Bird, Christian Goralski, Ralph Joerg Hellmig,
+Mogens Larsen, Ferdinand Mosca, Carlos Pesce, Gerhard Sonnabend,
+Djordje Vidanovic and Jason Williamson for testing and sending feedback.
+Special thanks to Margit Eberl for creating the Yace logo.
+
+Version 0.22 26.07.2000
+Note, readme.txt probably is not very up to date.
+Because of Mogens Larsen, Bent Lrsen, Lance Amstrong and a lost bet a new
+mode larsen_mode. Default is 0. larsen_mode tries to play like Bent Larsen
+in the opening.
+larsen_mode 1
+will randomly open with c4 or f4 as white.
+larsen_mode 2
+will mirror whites first move as black, i.e. f4 f5, e4 e5, Nf3 Nf6 etc.
+larsen_mode 3
+will do both of the above.
+Note, that larsen_mode can not be acknowledged, when playing under
+a GUI, that provides its own book.
+Allow time allocation to be influenced by the user by two new commands.
+mintime_factor (default 0.5). Yace allocates usually a time for search.
+When it is finished with one depth, it will look if mintime_factor of
+this time is allready over. If yes, it will stop the search and save
+some time. The motivation of this small number is, that often searching
+the searching of the first move in the next depth will need more
+time, than everything searched allready (especially when much information
+is available from hash tables). If the search of the first move cannot be
+finished, no information is gained, and the time is lost. So, it doesn't
+make any sense to start the next depth.
+nmoves_inctime (default 0)
+When just out of book, Yace can allocate more time now. When nmoves_inctime
+is 5, for the first move out of book, yace will allocte 100% more time,
+the second 80% more time, ... and the 5th 20% more time.
+The defaults for the two new commands corresppond to the time allocation
+of previous versions of Yace. In game in mode giving a nmoves_inctime
+a value of (say) 8 seems superior to the defaults.
+Implemented Analyze mode.
+Check the input stream more often, when pondering or in Analyze mode.
+Show the material balance at the end of the PV in brackets instead of
+parentheses. Thanks to Tim Foden for his suggestion.
+When Yace fails high in zero window search, it shows the PV with
+t+. Rarely it fails low again for the same move at the same depth. This
+is shown with t-, and the best PV is the one before t+. This is ok
+when using Yace in command line mode or under its own graphical interface.
+Under Winboard, the last shown PV was not the current one. Fixed this
+by repeating the best PV.
+Changed the method of counting nodes. Yace will now count less nodes
+and will show less nodes/s. Actually it is even slightly faster, nevertheless.
+Acknowledge NAGs in the opening book. See new section about book customizing
+in readme.txt. The current method more or less was suggested by Mogens
+Larsen. Thanks a lot for his efforts.
+Stop clocks in force mode.
+While pondering Nf6 didn't work, but g8f6 did work to input a move, fixed.
+Implemented hint.
+Don't post the material evaluation at the end of the PV in Fritz mode.
+Don't show the 'H' after a move in the PV in Fritz mode (H means, that
+this continuation was found in the hash table).
+Now Fritz will show the PV of Yace.
+Post less lines in xboard mode (No prompt and not the selected search time).
+This also seems to fix problems with Wbengine by Remi Coulom. Thanks to
+Ray MacFadyen for reporting and testing.
+Experimentally increased Castle Bonus.
+Added a hack, so that time control may work under Fritz. The problem
+was, that Fritz sends new before every move. Due to Tim Mann's description
+of the engine interface, this means, that the engine shall be black.
+Then Fritz sends time. This shall set the engines (black) clock. Then
+Fritz sends all moves of the game, then go. When playing as white, the
+time is wrong. Added work around for this (in Fritz mode only). Please
+send feedback, if it works.
+Implemented "edit enhancements" for Fritz mode. Yace will accept the
+Fritz style commands for castling rights and ep target. (Winboard
+doesn't send those when setting up a position)
+Ponder command for Fritz style pondering implemented. So, it should
+be possible to set
+PonderMode = True
+CastleAndEP = True
+AnalyzeMode = True
+in yace.init (the init file for Fritz)
+Note, that on my single processor machine, Yace seems only to get about
+15% of the CPU time when playing against Fritz with permanent brain.
+Without permanent brain, the CPU time seems to be fair when playing
+against a native Fritz engine. When playing against a Winboard adapter
+engine, Yace seems much slower (only 50% or even less of usual performance
+against TCB.)
+Send the whole PV to Fritz, which doesn't seem to suffer from the
+buffer overflow problem from Winboard (see news of 0.18 and 0.20).
+Increased the saftey margin for the time control. If enough time is
+on the clock, Yace will try too keep at least 2 seconds, to account
+for delays, that may occure while communicating with the GUI.
+Added error message, when input command fails.
+Added yace.init for Fritz to the distribution. (After unpacking the
+zip, this file may be called yace~1.ini, so you have to rename it
+to yace.init)
+Changed piece values available with nval=1 to 80, 340, 350, 500, 1000.
+
+Quite a few people have tested and sent feedback for various pre releases
+of 0.22. Thanks a lot to Dann Corbit, Christian Goralski, Mogens Larsen,
+Christian Liebert, Ray MacFayden, Manfred Meiler, Gerhard Sonnabend,
+Aaron Tay.
+
+Version 0.21 06.07.2000
+new will disable force mode. This seems to be needed to play on FICS, but
+not for "normal" winboard games. Thanks to Joakim Nilsson for reporting
+and testing this.
+Move now under winboard implemented (Was working under xboard already).
+Make most of the null move algorithm user selectable. New commands
+null_low (default 3.0), null_high (3.0), null_endgame (2.0) and
+null_split (4.5). See readme.txt for some technical description of
+these parameters. Feedback about experiments with null_high 3.5
+and default null_split or null_split 6 appreciated.
+No null command anymore. (Actually, when you type null 2.5, Yace
+will interprete it as null_low 2.5, but it's better to use null_low.)
+Fixed a bug in the book move selection, when the sum of the move counts
+was very large.
+Allow a little bit more variation of book moves. Earlier versions
+didn't allow moves, that were played less than 6% of the time in the
+situation. Allow 3% now. Also, when the move was played more than
+50 times, it will be allowed, even if it was played less the 3% of
+the time (but will be selected with a very low probability).
+Implemented pondering. (But still some deficiences with pondering)
+Use easy and hard. By default, no pondering. Time code for pondering is
+still primitive. Just uses 40% more time, when pondering is allowed, and
+more than 5 moves are left.
+Implemented remove command ("Retract Move" from winboard).
+New piece values (almost untested, so old values are default)
+New command nval. Put
+nval 1
+into yace.ini to get the new piece values. Old values (P,N,R,Q)
+are 100, 320, 330, 500, 1000 centipawns, new values are
+100, 335, 340, 560, 1150. This should Yace help to not make bad trades
+in the early game.
+Increased the value for the pawn shield significantly.
+Thanks to Christian Goralski, Frank Quisinsky and Aaron Tay for testing.
+Fixed bug in level command. Giving the time as min:sec didn't work.
+Accept fritz command.
+Accept reset command for clearing hash tables.
+
+Version 0.20 29.06.2000
+Added table bases, new (Nalimov) format, compressed or uncompressed.
+Thanks to Andrew Kadatch for permisson, to use the compression code,
+and of course to Eugene Nalimov. With his source and documentation,
+it was much easier, than I thought. Also thanks to Mogens Chr. Larson,
+Volker Pittlik and Christian Goralsiki, for testing this.
+Add a line like
+tbldir e:\egtb
+to yace.ini. Yace will use 2 Mb of cache for the table bases (should be
+adjustable soon).
+Yet another try for to fix the buffer overflow of winboard. The
+fix advertized for 0.18 was wrong. Now, Yace will post much less
+to winboard. The left out parts will be in the yace log.
+Got rid of the null_threat command. This is redundant with "inullthreat".
+Was never documented, so no problem.
+Got rid of some short cuts for hash table hits, when the score was mate.
+This worked well, when all the mates were searched, but now, we get some
+mates for free from the EGTB tables. Hope, this won't hurt too much.
+New KPK evaluation code. Thanks to Dann Corbit for reporting the bug.
+Don't post stupid PV's with repeated null moves from the hash table anymore.
+Got rid of a small speed enhancement in search, that only speeded up test
+positions a tiny little bit and slowed down real games a tiny little bit.
+Added rem and ; commands to allow commenting the ini file. Comments must be
+on their own lines like
+
+rem This is a comment
+; and this also.
+  REM You can indent comments.
+ReM As with all yace commands, rem is case insensitive.
+; Due to my lazyness, there must be at least one space character
+; after the semicolon.
+hash=10M ; This is *not* allowed.
+
+Got rid of an old bug, where Yace sometimes started to think after a
+setboard command.
+Added a pointer to Mogens Larsen's site for book downloading.
+Suggesting to use hash 0 before book creation, to save memory.
+Print the version number into test.sum.
+Fixed a stupid bug, where Yace could castle through check, when the
+checking piece was a pawn. Thanks to Dan Andersson for reporting this
+and providing a reproducable test case.
+
+Version 0.18 20.06.2000
+Fractional extensions.
+New commands icheck, irepcheck, irecapture, ipawn7, inullthreat.
+defaults:      1.0     0.59       0.59        1.0       1.0
+See readme.txt under fractional extensions. This change slightly
+slows down the search engine. (In Yace 0.17 and earlier, all the
+defaults would have been 1.0)
+No experience, if this helps in real games yet.
+The null command no accepts a floating point value. (So you can write
+null=2.5).
+Winboard very rarely crashed, when Yace posted a long line at the end
+of the search -> in xboard_mode truncate the line.
+Ignore SIGINT for xboard compability.
+Penalize moving the king from the base line in early game.
+Minor hash table changes and speed-ups.
+
+Version 0.17  16.06.2000
+Small addition to readme.txt
+Fixed bug in Position editing. (Castling rights might have been wrong.)
+Accept the name of the ini file as a command line option. This
+makes testing of tuning parameters easier. So you can call
+yace yacetest.ini
+To make logging work, both instances must write to a different logfile.
+No other command line options are accepted. When no command line
+option is given, yace.ini will be used.
+Fixed timing bug on some Windows system. Thanks to Volker Pittlik
+for finding this, and his help with debugging.
+Added loga command. (Append to logfile)
+Suggesting to use loga yace.log in yace.ini (Formerly, log yace.ini
+was suggested.)
+While doing this found a bug in the log command. When a second log
+command was given, the old file wasn't closed. (Would be closed
+at program end anyway, but this way, one could run out of file
+descriptors)
+Added rmoves and rscore commands. When Yace detects rmoves moves
+with a score smaller than rscore, it will resign. Allowed values
+for rmoves are 3 <= rmoves <= 20 amd -6 >= rscore >= -20. rscore
+can be a floatimg point value (I.e. rscore=-6.8). To let Yace resign
+soon, put the following lines into yace.ini:
+
+resign om
+rmoves 3
+rscore -6
+
+Still, Yace will not resign by default. The (new) default for rscore is -8.0
+and for rmoves 4. Thanks to Mogens Larsen for his suggestion.
+
+Version 0.16  14.06.2000
+(Hopefully) found the repetition bug. (Thanks to Gabor Szots for posting
+the FIDE rules.) I thought the position must be repeated 3 times (vs.
+occure for the third time)
+
+Version 0.15
+Implement an experimental version of resigning. To enable put a line
+resign on into yace.ini. (Default is resign off.) No clock considerations
+yet.
+Updated readme.txt a little bit.
+Make the not supported commands silent in xboard mode.
+Implement post/nopost.
+Accept the analyze command, answer: Error (unknown command): analyze
+Accept the bk command.
+Accept the computer command.
+Accept the name command.
+Accept the rating command.
+Accept the hint command.
+Accept the draw command. All of these are noops.
+Bug fixed in time code (for Windows only).
+Bug fixed where draw was not recognized, because only one move was possible.
+New hash table strategy: Make it easier to overwrite entries from previous
+search.
+Less lines posted in xboard_mode.
+Posting shows some more information.
+.: finished this depth
+f.: after search is over, finished this depth
+u.: after search is over, this depth is partly unfinished
+t: best at this depth so far
+t+: move seems better (fail high), research with larger window *)
+t-: fails low again (shouldn't happen too ofen) *)
+++: Much better than expected, start search again with new window. *)
+--: Much worse than expected, start search again with new window. *)
+
+*)
+PV shown doesn't make much sense, it is such the PV that failed high
+or low. The researching should show a better PV.
+
+Version 0.14
+Minor evaluation tweak: Yace shouldn't loose castling rights that easy
+anymore. Freepawn are a tiny bit more worth now. Default positional
+score is a bit higher now.
+New command pval:
+pval=1.0 [default, old default would have been 0.67]
+pval=1.5 [positional scores are higher]
+The "=" can be replaced by one (or more) space character(s).
+Values between 0.5 and 2.0 are accepted.
+To experiment put such a line in yace.ini
+Of course no floating point will be used internally.
+Changed invalid move to Illegal move.
+Don't complain about result anymore (but still ignore).
+Move ordering enhancements.
+Added a few error messages.
+Deleted some debug output.

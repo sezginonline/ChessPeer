@@ -1,0 +1,13 @@
+To let Yace better support ChessAssitant, add these lines to your
+Engines.ini file. Note, that this way, Yace will be able, to use the
+hash you selected in CA. The original value in yace.ini will be overwritten.
+
+[Yace]
+Values=Yace Values
+[Yace Values]
+GUI=Chess Assistant 5.1
+[Hash Options Yace]
+IniFile=Yace.ini
+IniString="hash "
+Mode=0
+Units=2

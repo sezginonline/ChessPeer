@@ -1,0 +1,182 @@
+Yace Tips and Tricks for 0.99.50.3
+
+I.  Book Building
+
+	Okay, you got Yace downloaded and running, playing in Winboard against other engines like Crafty, Anmon, ZChess, and more.  It's doing well, and you like how it plays.  But wouldn't it be cool if you could make Yace play a book of your favorite openings?  Find out, maybe, if the lines you like to play are sound or good?  I've done that exactly for my computer account on the United States ChessLive server, and you can use the same principles to make your Yace have the book you want.
+
+When doing this, a chess database program is recommended.  It's much easier to assemble the pgns together.  If you don't have a database program, you can use text editors, but any pgn file of substantial size becomes slow and unwieldy to handle.  An excellent freeware database is available if you need a chess database.  You can download SCID at http://scid.sourceforge.net and make your life much easier.
+
+For my latest book, I first assembled a collection of pgns downloaded >from the U of Pitt ftp site.  The first group of pgns were composed of games from high level tournaments since the 1980s up until now.  This was to give Yace a broad knowledge of openings, along with the latest moves being played.  All told, there were approximately 13,000 games in this set.  I saved this a database file in SCID.
+
+Next, I wanted Yace to play a lot of risky/exciting openings.  That is--gambits, even unsound ones like the Halloween Attack.  So again from U of Pitt, I downloaded collections of gambits, and put them into another database separate from the database previously made.  It helps to keep things modular and separate, in case you want to make changes later for the file to build your Yace book.  This database contained about 35,000 games.
+
+Finally, I used another database I had containing 2,000 games played between Winboard engines.
+
+The next step is to assemble everything into one pgn file.  First export the previous databases to pgn files.  Next, create a new empty database and import each of those pgns.  By doing this, I now had a database of 50,000 games from which to create Yace's book. So I exported the database to a pgn named book.pgn and copied book.pgn into my Yace directory.  Note that because 70% of the database consisted of the gambits/riskier games, this will cause the resulting book for Yace to play those in most cases.  
+
+Got your book.pgn ready?  Okay, if you already have a book for Yace, you'll want to rename it, something like dbbookbak.bin so you can always revert back if need be.  Now start Yace in text/MSDOS mode.  First use the book_parse command:
+
+book_parse book.pgn
+
+This'll give you the number of moves, nmoves, found.  You'll want to use about 1% of that number in the book_create command which has the following format:
+
+book_create book.pgn #initial_entries #maxply #mincount
+
+#intital_entries will equal 1% of the number of moves found when book_parse was run
+#maxply = how deep you want the book to go
+#mincount = a number of times a move has to be played to be put in the book
+
+so let's say I got a number of 1,000,000 moves when I used book_parse.  To make my book, I enter the command:
+
+book_create book.pgn 10000 30 2
+
+Now you'll need to get a cup of coffee and let Yace churn out the book.  When it's done, you should be given an initial entries number.  Hopefully it should be between 80-99% of the value you used for #initial_entries.  If it's less than 80%, you'll want to run book_create again, but adjust your #initial_entries down.  If more than 99%, adjust the initial_entries up.
+
+Everything work?  Great, have fun with it. And I'm going to tell you how to have more fun with it.
+
+
+II.  Nags
+
+All right, you got a book and Yace is using it.  But still, you find you want it to play something more often, or you want it to stop playing the Dutch!  Not a problem.  With a text editor and use of annotations like !!, !, !?, =, ?, ?!, ??, you can get Yace to play the openings you want.
+
+First create an empty pgn file.  Now let's say you want Yace to always play the Grob when it has white--simply put in this entry:
+
+[]
+1. g4!!
+
+and save the pgn file.
+
+The [] is used to keep different lines separate.  So say you also wanted the file to force Yace to always play the Sicilian against e5, add a line to have the file look like this:
+
+[]
+1. g4!!
+
+[]
+1. e4 c5!!
+
+You can do this with as many lines of play as you want.  And here's what the annotations do:
+
+!!   Yace will always play this if it encounters this position
+!    This will greatly increase the chance that Yace will play this move
+!?   Somewhat increase the chance
+=   This is used for "erasing" of previous annotations.  For example, you want Yace to stop playing the Grob all the time after you have previously nagged it to do so.  1. g4= will have the effect of erasing 1. g4!!
+?!   Somewhat decrease the chance this move will be played
+?  Greatly decrease
+?? Never play this move
+
+For example, this morning I decided to change how Yace played.  This was the text in my pgn file used for nagging:
+
+[]
+1. e4! e5 2. Nf3! Nc6 3. Nc3! Nf6 4. Nxe5!!
+
+[]
+1. e4 c5 2. b4?!
+
+[]
+1. e4 e5 2. f4!
+
+[]
+1. e4 c5! 2. d4?!
+
+[]
+1. e4 d5 2. d4=
+
+[]
+1. e4 c6 2. d4 d5 3. f3!
+
+[]
+1. e4 e5 2. Nf3 f5=
+
+[]
+1. e4 e5 2. Nf3 Nc6 3. Bb5 f5!
+
+[]
+1. f4 e5= 2. fxe5 d6= 3. exd6 Bxd6= 4. Nf3 g5=
+
+[]
+1. d4 d5 2. c4 e5?!
+
+[]
+1. d4 d5 2. e4=
+
+[]
+1. d4 Nf6 2. c4 e5=
+
+[]
+1. Nf3 f5?
+
+[]
+1. e4 e6?? 2. d4 d5 3. exd5??
+
+[]
+1. d4 f5? 
+
+[]
+1. g4=
+
+[]
+1. b4=
+
+[]
+1. d4 f5 2. e4!
+
+[]
+1. c4 f5?
+
+
+To put this into effect, I stated Yace in text/MSDOS mode and then typed:
+
+book_add nag.pgn
+
+Boom, now Yace will play e4 mostly and stop playing the Dutch in most part, along with some other things.
+
+
+III.  Book Learning in Yace 0.99.50.3
+
+
+This is a new feature I find exciting.  Yace plays an opening line and gets smashed.  It would be nice if it would stop playing such a patzer's opening, wouldn't it?  You can now enable Yace to learn to stop playing those patzer lines, or perhaps lines that just don't suit Yace's style.
+
+Start Yace in text/MSDOS mode.  Enter the following commands:
+
+book_f dblearn.bin
+book_c nul 20000 1
+
+If everything goes right, Yace will have created a file named dblearn.bin, and will be ready to begin learning.  If not, I've got a workaround detailed later on.
+
+Quit Yace, and then add the following line to the yace.ini file:
+
+book_learn 7
+
+And Yace is now ready to learn!
+
+
+I had no problems with these commands on one computer, the file dblearn.bin was created.  But on another, I got a message saying cannot open, Winboard doesn't like my output, and the dblearn.bin file was not created.  There is an easy workaround to this if it happens to you.  Simply create an empty file named dblearn.bin !  This is done easily enough by using an existing bin file, opening it in a text editor and erasing all the information in there.  Then save it as dblearn.bin and put it in your Yace directory.  Start yace, and execute the book_c nul 20000 1 command, quit, and put the book_learn 7 entry in yace.ini.  Book learning will now work.
+
+
+IV.  ICS tips
+
+One of the things I like to have Yace do on the US ChessLive server is whisper.  That way observers of the game can see what Yace thinks of the position, how much time it took, how fast it was searching, even the primary line it was thinking about!  However, whispering of the lines can be dangerous--I had a case of where one player used another account to observe the game and see what Yace was thinking about.  So that's why my current configuration has these three lines in the yace.ini:
+
+max_PV_tellics 0
+announce_mate kibitz
+show_eco 2
+
+the max_PV_tellics entry tells Yace to send no characters after PV.   Yace will continue to whisper score, search depth, kNps but leave off the line it was thinking when it played.  
+
+announce_mate kibitz is useful for getting some human players to resign and not drag a game out all the way to the bitter end.
+
+show_eco 2 is a new feature of Yace 0.99.50.3.  Yace will whisper or kibitz the names of openings.
+
+
+V.  Final Notes
+
+
+This is written as additional help for users of Yace.  Any problems, mistakes, typos, etc about this file should be directed to mjosephson@erols.com.  
+
+Matt Josephson
+http://chessmonk.fateback.com
+Subscribe to the Yace newsletter by sending a blank e-mail to:
+yacecomp-subscribe@topica.com
+
+
+

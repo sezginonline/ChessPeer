@@ -1,0 +1,186 @@
+[Site "Opening 1"]
+c4!!
+
+[Site "Opening 2"]
+d4!!
+
+[Site "Opening 3"]
+e4!!
+
+[Site "Opening 4"]
+Nf3!!
+
+[Site "Symmetric english"]
+c4 c5!
+
+[Site "Not b6"]
+c4 c5 Nf3 b6?
+
+[Site "Anglo-Grunfeld"]
+c4 Nf6!?
+
+[Site "Neo-Catalan"]
+c4 e6?!
+
+[Site "Anglo-Dutch"]
+c4 f5?
+
+[Site "English: 1... e6 (A13)"]
+c4 Nf6 g3 e6 Bg2 d5 Nf3 dxc4 Qa4!!
+
+[Site "Queen's pawn 1"]
+d4 d5!!
+
+[Site "QGA"]
+d4 d5 c4 dxc4!!
+
+[Site "QGD and semi-Slav"]
+d4 d5 c4 e6!!
+
+[Site "QGD: line 1"]
+d4 d5 c4 e6 Nc3 Be7 Nf3 Nf6 Bf4 O-O e3 c5 dxc5 Bxc5 Qc2 Nc6 Rd1 Qa5 a3 Be7 Nd2 e5 Bg5 d4 Nb3 Qd8 Be2 a5!!
+
+[Site "QGD: line 2"]
+d4 d5 c4 e6 Nc3 Be7 Nf3 Nf6 Bf4 O-O e3 c5 dxc5 Bxc5 Qc2 Nc6 Rd1 Qa5 a3 Be7 Nd2 e5 Bg5 d4 Nb3 Qd8 Be2 h6!!
+
+[Site "Slav"]
+d4 d5 c4 c6!!
+
+[Site "Queen's pawn 2"]
+d4 Nf6!!
+
+[Site "With e6"]
+d4 Nf6 c4 e6!!
+
+[Site "Catalan"]
+d4 Nf6 c4 e6 g3!!
+
+[Site "E05: Open Catalan"]
+d4 Nf6 c4 e6 g3 d5 Nf3 Be7 Bg2 O-O O-O dxc4 Qc2!!
+
+[Site "Bogo- and Queen's indian"]
+d4 Nf6 c4 e6 Nf3!!
+
+[Site "Nimzo"]
+d4 Nf6 c4 e6 Nc3!!
+
+[Site "D50: line 1"]
+d4 Nf6 c4 e6 Nc3 d5 Bg5 Be7!
+
+[Site "D50: line 2"]
+d4 Nf6 c4 e6 Nc3 d5 Bg5 Nbd7!
+
+[Site "With g6"]
+d4 Nf6 c4 g6!!
+
+[Site "Neo-Grunfeld"]
+d4 Nf6 c4 g6 g3!!
+
+[Site "Grunfeld"]
+d4 Nf6 c4 g6 Nc3!! d5!! 
+
+[Site "Anti-Grunfeld"]
+d4 Nf6 c4 g6 d5?!
+
+[Site "D01"]
+d4 Nf6 Nc3??
+
+[Site "Queen's pawn 3"]
+d4 f5!!
+
+[Site "Schmid gambit"]
+d4 c5 d5 Nf6 c4!!
+
+[Site "Sicilian"]
+e4 c5!!
+
+[Site "Closed"]
+e4 c5 Nc3!
+
+[Site "Open"]
+e4 c5 Nf3!
+
+[Site "Sozin"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6!
+
+[Site "Scheveningen"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 e6!
+
+[Site "Dragon"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6!
+
+[Site "Dragon: line 1"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5!
+
+[Site "Dragon: line 2"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O Nxd4!
+
+[Site "Dragon: line 3"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O Qa5!?
+
+[Site "Dragon: line 4"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O Bd7!?
+
+[Site "Najdorf"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6!
+
+[Site "Najdorf line 1"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7!
+
+[Site "Najdorf line 2"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6!
+
+[Site "Najdorf line 3"]
+e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 h6!?
+
+[Site "French"]
+e4 e6!!
+
+[Site "C18: French defense"]
+e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Qa5??
+
+[Site "C18: French defense"]
+e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 7. Qg4!! O-O!!
+
+[Site "King's pawn"]
+e4 e5!!
+
+[Site "Petrov"]
+e4 e5 Nf3 Nf6!
+
+[Site "Avoid rare lines in C42"]
+e4 e5 Nf3 Nf6 Nxe5 d6 Nf3!!
+
+[Site "C43 no.1"]
+e4 e5 Nf3 Nf6 d4 exd4!
+
+[Site "C43 no.2"]
+e4 e5 Nf3 Nf6 d4 Ne4!
+
+[Site "Scotch"]
+e4 e5 Nf3 Nc6 d4! exd4 Nxd4!!
+
+[Site "Caro-Kann"]
+e4 c6!! d4!! d5!!
+
+[Site "Not Tartakower var."]
+e4 c6 d4 d5 f3?
+
+[Site "Bird 1"]
+f4 d5!!
+
+[Site "Bird 2: King's gambit"]
+f4 e5 e4!!
+
+[Site "Reti: Sicilian"]
+Nf3 c5!!
+
+[Site "Reti: KIA"]
+Nf3 d5!!
+
+[Site "Reti var."]
+Nf3 d5 c4?!
+
+[Site "Reti: KIA"]
+Nf3 Nf6!!
+

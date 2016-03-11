@@ -1,0 +1,43 @@
+[YACE]
+; probably you will need to edit the next two lines
+EngineDir="c:\yace"
+EnginePath="c:\yace\yace.exe"
+Console=0
+; for investigating problems:
+; Console=1
+; Logfile="yace.log"
+NameRev="Yace 0.99.68c"
+EditMode=1
+InputMoveDelay=30
+OutputMoveDelay=0
+ExitString="quit\n"
+EditEndString=".\n"
+SwapColorString="c\n"
+EditString="edit\n#\n"
+ForceString="force\n"
+UndoMoveString="undo\n"
+ColorStringw="white\n"
+ColorStringb="black\n"
+ComputeString="go\n"
+MoveNowString="?\n"
+NewGameString="force\nhard\neasy\nnew\n"
+InitString="xboard\nGUI CP\nnew\nhard\npost\n"
+; The GUI is Yace specific. It makes Yace to send "cleaner" PVs.
+PonderOn="hard\n"
+PonderOff="hard\neasy\n"
+SetAnalyseMode="analyze\n"
+ExitAnalyseMode="exit\n"
+Level0=sd %1\n
+; The next command is specific to yace
+Level1=xboard off\ntime %4 %3 %6 %5\nxboard\n
+; WB general:
+; Level1=level %4 %7 0\n
+Level2=st %3\n
+Level3=sd %1\n
+Level4=level 1 %7 %3\n
+Level5=level 0 %7 %5\n
+Level6=sd 62\n
+Level7=level 0 %3 0\n
+BookOn="use_book on\n"
+BookOff="use_book off\n"
+Options=2
